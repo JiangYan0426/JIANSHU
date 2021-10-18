@@ -1,7 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {CSSTransition} from 'react-transition-group';
-import * as actionCreators from './store/actionCreators';
+// import * as actionCreators from './store/actionCreators';
+// 不用像上面那么麻烦，直接引入store就直接找到store下面的index
+import {actionCreators} from './store';
+
 import { HeaderWrapper,Logo,Nav,NavItem,SearchWrapper,NavSearch,Addition,Button} from './style';
 
 
