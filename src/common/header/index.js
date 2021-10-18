@@ -53,7 +53,7 @@ const Header=(props)=>{
 const mapStateToProps=(state)=>{
     return {
         // 把仓库store里的focused映射到props里面
-        focused :state.header.focused
+        focused :state.header.get('focused')
     }
 }
 
