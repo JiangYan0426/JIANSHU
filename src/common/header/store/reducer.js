@@ -3,7 +3,8 @@ import {fromJS} from 'immutable';
 
 // 把js对象转化成immutable对象
 const defaultState=fromJS({
-    focused:false
+    focused:false,
+    list:[]
 });
 
 export default (state=defaultState,action)=>{
@@ -14,6 +15,9 @@ export default (state=defaultState,action)=>{
     }
     if(action.type===constants.SEARCH_BLUR){
         return state.set('focused',false);
+    }
+    if(action.type===constants.CHANGE_LIST) {
+        return state.set('list',action.data);
     }
     return state;
     

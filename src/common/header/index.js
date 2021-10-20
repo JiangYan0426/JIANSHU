@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import {CSSTransition} from 'react-transition-group';
 // import * as actionCreators from './store/actionCreators';
@@ -20,31 +20,31 @@ import { HeaderWrapper,
         Button
 } from './style';
 
-const getListArea=(show)=>{
-    if (show) {
-        return(
-            <SearchInfo>
-                <SearchInfoTitle>
-                    热门搜索
-                    <SearchInfoSwitch>换一批</SearchInfoSwitch>
-                </SearchInfoTitle>
-                <SearchInfoList>
-                <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                </SearchInfoList>  
-            </SearchInfo>
-        )
-    }else{
-        return null
+class Header extends Component {
+    getListArea(){
+        if (this.props.focused) {
+            return(
+                <SearchInfo>
+                    <SearchInfoTitle>
+                        热门搜索
+                        <SearchInfoSwitch>换一批</SearchInfoSwitch>
+                    </SearchInfoTitle>
+                    <SearchInfoList>
+                        {
+                            this.props.list.map((item)=>{
+                                return <SearchInfoItem key={item}>{item}</SearchInfoItem>
+                            })
+                        }
+                    </SearchInfoList>  
+                </SearchInfo>
+            )
+        }else{
+            return null
+        }
     }
-}
-const Header=(props)=>{
-    return (
-        <HeaderWrapper>
+    render() {
+        return (
+            <HeaderWrapper>
             <Logo href='/'/>
             <Nav>
                 <NavItem className='left active'>首页</NavItem>
@@ -55,18 +55,18 @@ const Header=(props)=>{
                 </NavItem>
                 <SearchWrapper>
                     <CSSTransition
-                        in={props.focused}
+                        in={this.props.focused}
                         timeout={200}
                         classNames="slide"
                     >
                         <NavSearch 
-                            className={props.focused?'focused':''}
-                            onFocus={props.handleInputFocus}
-                            onBlur={props.handleInputBlur}
+                            className={this.props.focused?'focused':''}
+                            onFocus={this.props.handleInputFocus}
+                            onBlur={this.props.handleInputBlur}
                         ></NavSearch>
                     </CSSTransition>
-                    <i className={props.focused?'focused iconfont':'iconfont'}>&#xe614;</i>
-                    {getListArea(props.focused)}
+                    <i className={this.props.focused?'focused iconfont':'iconfont'}>&#xe614;</i>
+                    {this.getListArea()}
                 </SearchWrapper>
                 
             </Nav>
@@ -79,24 +79,24 @@ const Header=(props)=>{
                 
             
         </HeaderWrapper>
-    )
+        )
+    }
 }
-       
-    
 
-
-const mapStateToProps=(state)=>{
+const mapStateToprops=(state)=>{
     return {
-        // 把仓库store里的focused映射到props里面
+        // 把仓库store里的focused映射到this.props里面
         // focused :state.get('header').get('focused')
-        focused :state.getIn(['header','focused'])  //两种都可以
+        focused :state.getIn(['header','focused']) , //两种都可以
+        list :state.getIn(['header','list'])
 
     }
 }
 
-const mapDispathToProps=(dispatch)=>{
+const mapDispathToprops=(dispatch)=>{
     return {
         handleInputFocus(){
+            dispatch(actionCreators.getList());
             dispatch(actionCreators.searchFocus());
         },
         handleInputBlur(){
@@ -106,4 +106,4 @@ const mapDispathToProps=(dispatch)=>{
 
 }
 // 将Header组件和store连接起来，括号里是两种映射
-export default connect(mapStateToProps,mapDispathToProps)(Header)
+export default connect(mapStateToprops,mapDispathToprops)(Header)
