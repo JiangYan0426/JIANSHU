@@ -33,7 +33,7 @@ class Header extends Component {
                 )
             }
         }
-        
+
         if (focused || mouseIn) {
             return(
                 <SearchInfo 
@@ -54,7 +54,7 @@ class Header extends Component {
         }
     }
     render() {
-        const{focused,handleInputFocus,handleInputBlur}=this.props;
+        const{focused,handleInputFocus,handleInputBlur,list}=this.props;
         return (
             <HeaderWrapper>
             <Logo href='/'/>
@@ -73,7 +73,7 @@ class Header extends Component {
                     >
                         <NavSearch 
                             className={focused?'focused':''}
-                            onFocus={handleInputFocus}
+                            onFocus={()=>handleInputFocus(list)}
                             onBlur={handleInputBlur}
                         ></NavSearch>
                     </CSSTransition>
@@ -111,8 +111,8 @@ const mapStateToprops=(state)=>{
 // 派发action给store，store一定会转给reducer
 const mapDispathToprops=(dispatch)=>{
     return {
-        handleInputFocus(){
-            dispatch(actionCreators.getList());
+        handleInputFocus(list){
+            (list.size===0)&&dispatch(actionCreators.getList());
             dispatch(actionCreators.searchFocus());
         },
         handleInputBlur(){
